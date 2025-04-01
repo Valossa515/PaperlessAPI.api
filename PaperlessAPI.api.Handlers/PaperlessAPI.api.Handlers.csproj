@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QuestPDF" Version="2025.1.7" />
+    <PackageReference Include="Serilog" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PaperlessAPI.api.Borders\PaperlessAPI.api.Borders.csproj" />
+    <ProjectReference Include="..\PaperlessAPI.api.Shared\PaperlessAPI.api.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

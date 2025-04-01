@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperlessAPI.api", "PaperlessAPI.api\PaperlessAPI.api.csproj", "{6E90B4DC-3FE0-423E-9FC4-9E2A9B147C70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperlessAPI.api.Borders", "PaperlessAPI.api.Borders\PaperlessAPI.api.Borders.csproj", "{7B287E24-A283-449D-B7F0-A27951930BFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperlessAPI.api.Handlers", "PaperlessAPI.api.Handlers\PaperlessAPI.api.Handlers.csproj", "{B5BB456E-FA13-46F8-A185-C7E2C6EB8E57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperlessAPI.api.Repositories", "PaperlessAPI.api.Repositories\PaperlessAPI.api.Repositories.csproj", "{2318CEFA-60AF-414F-A8DB-DA87ACAA5197}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperlessAPI.api.Shared", "PaperlessAPI.api.Shared\PaperlessAPI.api.Shared.csproj", "{05E89208-AFD3-48E8-A6FB-F355F25D7228}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaperlessAPI.api.Tests", "PaperlessAPI.api.Tests\PaperlessAPI.api.Tests.csproj", "{0655E0CA-FE5C-465C-84C9-D545230DAE64}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E90B4DC-3FE0-423E-9FC4-9E2A9B147C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E90B4DC-3FE0-423E-9FC4-9E2A9B147C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E90B4DC-3FE0-423E-9FC4-9E2A9B147C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E90B4DC-3FE0-423E-9FC4-9E2A9B147C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B287E24-A283-449D-B7F0-A27951930BFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B287E24-A283-449D-B7F0-A27951930BFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B287E24-A283-449D-B7F0-A27951930BFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B287E24-A283-449D-B7F0-A27951930BFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5BB456E-FA13-46F8-A185-C7E2C6EB8E57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5BB456E-FA13-46F8-A185-C7E2C6EB8E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5BB456E-FA13-46F8-A185-C7E2C6EB8E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5BB456E-FA13-46F8-A185-C7E2C6EB8E57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2318CEFA-60AF-414F-A8DB-DA87ACAA5197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2318CEFA-60AF-414F-A8DB-DA87ACAA5197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2318CEFA-60AF-414F-A8DB-DA87ACAA5197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2318CEFA-60AF-414F-A8DB-DA87ACAA5197}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05E89208-AFD3-48E8-A6FB-F355F25D7228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05E89208-AFD3-48E8-A6FB-F355F25D7228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05E89208-AFD3-48E8-A6FB-F355F25D7228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05E89208-AFD3-48E8-A6FB-F355F25D7228}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0655E0CA-FE5C-465C-84C9-D545230DAE64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0655E0CA-FE5C-465C-84C9-D545230DAE64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0655E0CA-FE5C-465C-84C9-D545230DAE64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0655E0CA-FE5C-465C-84C9-D545230DAE64}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF0F4AF0-B39D-4181-866E-BE71253AD3CF}
+	EndGlobalSection
+EndGlobal
