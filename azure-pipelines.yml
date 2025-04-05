@@ -1,0 +1,61 @@
+trigger:
+- main
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  artifactName: 'drop'
+
+pool:
+  vmImage: 'windows-latest'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build_Job
+    steps:
+    - task: NuGetToolInstaller@1
+      displayName: 'Instalar NuGet'
+
+    - task: NuGetCommand@2
+      displayName: 'Restaurar pacotes NuGet'
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      displayName: 'Compilar solução'
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: >
+          /p:DeployOnBuild=true
+          /p:WebPublishMethod=Package
+          /p:PackageAsSingleFile=true
+          /p:SkipInvalidConfigurations=true
+          /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\" 
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: VSTest@2
+      displayName: 'Executar testes'
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publicar artefato'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: '$(artifactName)'
+        publishLocation: 'pipeline'
+
+- stage: Deploy
+  dependsOn: Build
+  jobs:
+  - job: Deploy_Job
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Baixar artefato'
+      inputs:
+        artifact: '$(artifactName)'
+        path: '$(Pipeline.Workspace)'
