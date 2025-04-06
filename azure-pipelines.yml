@@ -27,12 +27,7 @@ stages:
       displayName: 'Compilar solução'
       inputs:
         solution: '$(solution)'
-        msbuildArgs: >
-          /p:DeployOnBuild=true
-          /p:WebPublishMethod=Package
-          /p:PackageAsSingleFile=true
-          /p:SkipInvalidConfigurations=true
-          /p:PackageLocation="$(Build.ArtifactStagingDirectory)\" 
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\"'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
