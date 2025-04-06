@@ -52,10 +52,23 @@ stages:
 - stage: Deploy
   dependsOn: Build
   jobs:
-  - job: Deploy_Job
-    steps:
-    - task: DownloadPipelineArtifact@2
-      displayName: 'Baixar artefato'
-      inputs:
-        artifact: '$(artifactName)'
-        path: '$(Pipeline.Workspace)'
+  - deployment: Deploy_Job
+    displayName: 'Deploy em Produção'
+    environment: 'prd-env' # Configure isso em Pipelines > Environments
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Baixar artefato'
+            inputs:
+              artifact: '$(artifactName)'
+              path: '$(Pipeline.Workspace)'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy para Azure App Service'
+            inputs:
+              azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
+              appType: 'webApp'
+              appName: 'PaperlessApi'
+              package: '$(Pipeline.Workspace)/**/*.zip'
