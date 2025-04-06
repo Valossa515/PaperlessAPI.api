@@ -1,5 +1,14 @@
 trigger:
-- main
+  branches:
+    include:
+      - main
+      - development
+
+pr:
+  branches:
+    include:
+      - main
+      - development
 
 variables:
   solution: 'PaperlessAPI.api.sln'
@@ -44,12 +53,39 @@ stages:
         artifact: '$(artifactName)'
         publishLocation: 'pipeline'
 
-# Stage de deploy direto para produção
-- stage: Deploy
-  dependsOn: Build
+# Stage de deploy para Staging
+- stage: Deploy_Staging
+  displayName: 'Deploy em Staging'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
+  jobs:
+  - deployment: Deploy_Staging
+    environment: 'staging-env'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Baixar artefato'
+            inputs:
+              artifact: '$(artifactName)'
+              path: '$(Pipeline.Workspace)'
+
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy em Staging'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
+              appType: 'webApp'
+              WebAppName: 'PaperlessApi'
+              packageForLinux: '$(Pipeline.Workspace)/drop/PaperlessAPI.api.zip'
+              ResourceGroupName: 'rg-paperless.api-dev'
+
+# Stage de deploy para Produção
+- stage: Deploy_Prod
+  displayName: 'Deploy em Produção'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   jobs:
   - deployment: Deploy_Prod
-    displayName: 'Deploy em Produção'
     environment: 'prd-env'
     strategy:
       runOnce:
@@ -62,7 +98,7 @@ stages:
               path: '$(Pipeline.Workspace)'
 
           - task: AzureRmWebAppDeployment@4
-            displayName: 'Deploy direto em produção'
+            displayName: 'Deploy em Produção'
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
