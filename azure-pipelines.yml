@@ -42,6 +42,15 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
+    # 👇 Step para listar os arquivos gerados
+    - task: PowerShell@2
+      displayName: 'Listar arquivos na pasta de artefatos'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Listando arquivos em $(Build.ArtifactStagingDirectory)..."
+          Get-ChildItem -Recurse -Path "$(Build.ArtifactStagingDirectory)"
+
     - task: PublishPipelineArtifact@1
       displayName: 'Publicar artefato'
       inputs:
