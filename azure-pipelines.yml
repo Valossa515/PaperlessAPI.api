@@ -80,4 +80,4 @@ stages:
               azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
               appType: 'webApp'
               appName: 'PaperlessApi'
-              package: '$(Pipeline.Workspace)/**/*.zip'
+              package: '$(Pipeline.Workspace)/drop/PaperlessAPI.api.zip'
