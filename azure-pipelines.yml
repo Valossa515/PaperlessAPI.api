@@ -42,7 +42,6 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
-    # 👇 Step para listar os arquivos gerados
     - task: PowerShell@2
       displayName: 'Listar arquivos na pasta de artefatos'
       inputs:
@@ -58,12 +57,13 @@ stages:
         artifact: '$(artifactName)'
         publishLocation: 'pipeline'
 
-- stage: Deploy
+# Stage Dev - deploy no slot dev
+- stage: Dev
   dependsOn: Build
   jobs:
-  - deployment: Deploy_Job
-    displayName: 'Deploy em Produção'
-    environment: 'prd-env' # Configure isso em Pipelines > Environments
+  - deployment: Deploy_Dev
+    displayName: 'Deploy em Dev'
+    environment: 'dev-env'
     strategy:
       runOnce:
         deploy:
@@ -75,9 +75,32 @@ stages:
               path: '$(Pipeline.Workspace)'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy para Azure App Service'
+            displayName: 'Deploy no slot dev'
             inputs:
               azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
               appType: 'webApp'
               appName: 'PaperlessApi'
               package: '$(Pipeline.Workspace)/drop/PaperlessAPI.api.zip'
+              deployToSlotOrASE: true
+              resourceGroupName: 'rg-paperless.api-dev'
+              slotName: 'dev'
+
+# Stage PRD - faz o swap do slot dev para produção
+- stage: PRD
+  dependsOn: Dev
+  jobs:
+  - deployment: SwapToProd
+    displayName: 'Promover para Produção (Swap Slot)'
+    environment: 'prd-env'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureAppServiceManage@0
+            displayName: 'Fazer Swap do slot dev para produção'
+            inputs:
+              azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
+              WebAppName: 'PaperlessApi'
+              ResourceGroupName: 'rg-paperless.api-dev'
+              SourceSlot: 'dev'
+              SwapWithProduction: true
