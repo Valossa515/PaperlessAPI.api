@@ -32,7 +32,7 @@ stages:
           /p:WebPublishMethod=Package
           /p:PackageAsSingleFile=true
           /p:SkipInvalidConfigurations=true
-          /p:PackageLocation="$(Build.ArtifactStagingDirectory)\" 
+          /p:PackageLocation="$(Build.ArtifactStagingDirectory)"
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
