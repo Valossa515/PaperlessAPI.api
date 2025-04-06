@@ -2,7 +2,7 @@ trigger:
 - main
 
 variables:
-  solution: '**/*.sln'
+  solution: 'PaperlessAPI.api.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   artifactName: 'drop'
