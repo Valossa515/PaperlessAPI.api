@@ -32,7 +32,7 @@ stages:
           /p:WebPublishMethod=Package
           /p:PackageAsSingleFile=true
           /p:SkipInvalidConfigurations=true
-          /p:PackageLocation="$(Build.ArtifactStagingDirectory)"
+          /p:PackageLocation="$(Build.ArtifactStagingDirectory)\" 
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
@@ -42,14 +42,6 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
-    - task: PowerShell@2
-      displayName: 'Listar arquivos na pasta de artefatos'
-      inputs:
-        targetType: 'inline'
-        script: |
-          Write-Host "Listando arquivos em $(Build.ArtifactStagingDirectory)..."
-          Get-ChildItem -Recurse -Path "$(Build.ArtifactStagingDirectory)"
-
     - task: PublishPipelineArtifact@1
       displayName: 'Publicar artefato'
       inputs:
@@ -57,13 +49,13 @@ stages:
         artifact: '$(artifactName)'
         publishLocation: 'pipeline'
 
-# Stage Dev - deploy no slot dev
-- stage: Dev
+# Stage de deploy direto para produção
+- stage: Deploy
   dependsOn: Build
   jobs:
-  - deployment: Deploy_Dev
-    displayName: 'Deploy em Dev'
-    environment: 'dev-env'
+  - deployment: Deploy_Prod
+    displayName: 'Deploy em Produção'
+    environment: 'prd-env'
     strategy:
       runOnce:
         deploy:
@@ -75,7 +67,7 @@ stages:
               path: '$(Pipeline.Workspace)'
 
           - task: AzureRmWebAppDeployment@4
-            displayName: 'Deploy no slot dev'
+            displayName: 'Deploy direto em produção'
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
@@ -83,25 +75,3 @@ stages:
               WebAppName: 'PaperlessApi'
               packageForLinux: '$(Pipeline.Workspace)/drop/PaperlessAPI.api.zip'
               ResourceGroupName: 'rg-paperless.api-dev'
-              deployToSlotOrASE: true
-              SlotName: 'dev'
-
-# Stage PRD - faz o swap do slot dev para produção
-- stage: PRD
-  dependsOn: Dev
-  jobs:
-  - deployment: SwapToProd
-    displayName: 'Promover para Produção (Swap Slot)'
-    environment: 'prd-env'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureAppServiceManage@0
-            displayName: 'Fazer Swap do slot dev para produção'
-            inputs:
-              azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
-              WebAppName: 'PaperlessApi'
-              ResourceGroupName: 'rg-paperless.api-dev'
-              SourceSlot: 'dev'
-              SwapWithProduction: true
