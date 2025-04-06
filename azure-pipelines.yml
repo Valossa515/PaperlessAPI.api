@@ -2,7 +2,7 @@ trigger:
 - main
 
 variables:
-  solution: '**/*.sln'
+  solution: 'PaperlessAPI.api.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   artifactName: 'drop'
@@ -27,12 +27,7 @@ stages:
       displayName: 'Compilar solução'
       inputs:
         solution: '$(solution)'
-        msbuildArgs: >
-          /p:DeployOnBuild=true
-          /p:WebPublishMethod=Package
-          /p:PackageAsSingleFile=true
-          /p:SkipInvalidConfigurations=true
-          /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\" 
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\\"'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
@@ -49,13 +44,29 @@ stages:
         artifact: '$(artifactName)'
         publishLocation: 'pipeline'
 
+# Stage de deploy direto para produção
 - stage: Deploy
   dependsOn: Build
   jobs:
-  - job: Deploy_Job
-    steps:
-    - task: DownloadPipelineArtifact@2
-      displayName: 'Baixar artefato'
-      inputs:
-        artifact: '$(artifactName)'
-        path: '$(Pipeline.Workspace)'
+  - deployment: Deploy_Prod
+    displayName: 'Deploy em Produção'
+    environment: 'prd-env'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Baixar artefato'
+            inputs:
+              artifact: '$(artifactName)'
+              path: '$(Pipeline.Workspace)'
+
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy direto em produção'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1 (8ce70574-0262-4d67-b89b-086c67605511)'
+              appType: 'webApp'
+              WebAppName: 'PaperlessApi'
+              packageForLinux: '$(Pipeline.Workspace)/drop/PaperlessAPI.api.zip'
+              ResourceGroupName: 'rg-paperless.api-dev'
